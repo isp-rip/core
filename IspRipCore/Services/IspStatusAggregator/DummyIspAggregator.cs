@@ -4,38 +4,12 @@ using IspRipCore.Services.IspStatusProvider;
 
 namespace IspRipCore.Services.IspStatusAggregator;
 
-public class DummyIspAggregator : IIspStatusAggregatorService
+// TODO: aggregation of multiple IIspStatusProviderService
+public class DummyIspAggregator(IIspStatusProviderService ispStatusProvider, IIspDataProviderService ispDataProvider)
+    : IIspStatusAggregatorService
 {
-    private readonly IIspStatusProviderService _ispStatusProvider;
-    private readonly IIspDataProviderService _ispDataProvider;
-
-    public DummyIspAggregator(IIspStatusProviderService ispStatusProvider, IIspDataProviderService ispDataProvider)
+    public Task<BaseResponse<IspStatus>> GetStatus(Guid id)
     {
-        _ispStatusProvider = ispStatusProvider;
-        _ispDataProvider = ispDataProvider;
-    }
-
-    public async Task<BaseResponse<IEnumerable<Isp>>> GetIsps(string country)
-    {
-        var ispsResponse = await _ispDataProvider.GetIsps(country);
-
-        if (!ispsResponse.Success || ispsResponse.Data == null)
-        {
-            return ispsResponse;
-        }
-
-        var ispList = ispsResponse.Data.Select(async isp =>
-        {
-            var resp = await _ispStatusProvider.GetStatus(isp);
-            isp.Status = resp.Data;
-            return (resp.Error, isp);
-        });
-
-        return null;
-    }
-
-    public Task<BaseResponse<Isp>> GetIsp(Guid id)
-    {
-        return null;
+        return ispStatusProvider.GetStatus(id);
     }
 }

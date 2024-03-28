@@ -4,6 +4,6 @@ namespace IspRipCore.Services.IspStatusAggregator;
 
 public interface IIspStatusAggregatorService
 {
-    Task<BaseResponse<IEnumerable<Isp>>> GetIsps(string country);
-    Task<BaseResponse<Isp>> GetIsp(Guid id);
+    Task<BaseResponse<IspStatus>> GetStatus(Guid id);
+    Task<BaseResponse<IspStatus>> GetStatus(Isp isp) => GetStatus(isp.Id);
 }

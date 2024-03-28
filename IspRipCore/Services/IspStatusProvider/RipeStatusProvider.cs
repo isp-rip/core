@@ -4,8 +4,12 @@ namespace IspRipCore.Services.IspStatusProvider;
 
 public class RipeStatusProvider : IIspStatusProviderService
 {
-    public Task<BaseResponse<IspStatus>> GetStatus(Guid id)
+    public async Task<BaseResponse<IspStatus>> GetStatus(Guid id)
     {
-        throw new NotImplementedException();
+        return new BaseResponse<IspStatus>()
+        {
+            Data = IspStatus.Ok,
+            Success = true
+        };
     }
 }
